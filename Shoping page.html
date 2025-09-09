@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amajon - Shop Your World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ff9900;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-closed {
+            transform: translateX(-100%);
+        }
+        
+        .hero-image {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d5b9ee7d-66a0-43ab-bffc-320d7afa4274.png');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%,
+            50% {
+                opacity: 1;
+            }
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-image {
+                height: 200px;
+            }
+            .search-bar {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="bg-white shadow-md p-4 flex items-center justify-between sticky top-0 z-50 bg-red">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class="text-2xl mr-4 md:hidden">☰</button>
+            <h1 class="text-3xl font-bold text-blue-600">Amajon</h1>
+        </div>
+        <div class="search-bar flex-1 mx-4">
+            <input type="text" id="search-input" placeholder="Search for products..." class="w-full p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="search-btn" class="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600">Search</button>
+        </div>
+        <div class="cart-icon">
+            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m16 8a2 2 0 11-4 0 2 2 0 014 0zm-8 0a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <span id="cart-count" class="cart-count">0</span>
+        </div>
+        <div class="flex items-center ml-4">
+            <button id="account-btn" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Account</button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 w-64 h-full bg-gray-800 text-white p-4 transform -translate-x-full z-40 overflow-y-auto md:hidden">
+        <button id="sidebar-close" class="text-2xl mb-4">&times;</button>
+        <nav>
+            <ul class="space-y-2">
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Home</a></li>
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Electronics</a></li>
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Books</a></li>
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Fashion</a></li>
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Home & Kitchen</a></li>
+                <li><a href="#" class="block p-2 hover:bg-gray-700">Sports</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- Hero Section -->
+        <section class="hero-image rounded-lg mb-8 flex items-center justify-center text-white text-center">
+            <div>
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">Welcome to Amajon</h2>
+                <p class="text-xl">Discover millions of products with unbeatable deals.</p>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <nav class="hidden md:block mb-8">
+            <div class="flex justify-center space-x-4">
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 active:bg-blue-500 active:text-white" data-category="all">All</button>
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-category="electronics">Electronics</button>
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-category="books">Books</button>
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-category="fashion">Fashion</button>
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-category="home">Home & Kitchen</button>
+                <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-category="sports">Sports</button>
+            </div>
+        </nav>
+
+        <!-- Products -->
+        <section id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Original 8 products remain the same -->
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/789c5fc2-08bf-4083-b939-0b136332f7fb.png" alt="High-resolution wireless Bluetooth headphones with sleek black design, ergonomic ear cushions, and a stylish urban aesthetic positioned on a desk next to a laptop"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Wireless Headphones</h3>
+                <p class="text-gray-600">$49.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="books">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/39ac3cc1-c4bb-4ecb-b602-5f2131ef3aad.png" alt="Vintage leather-bound book titled 'The Art of Programming' with gold lettering on the spine, sitting on a wooden bookshelf in a cozy library setting with warm lighting"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Programming Book</h3>
+                <p class="text-gray-600">$24.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="fashion">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fef89c0c-d039-4ee6-832f-af4c36765e16.png" alt="Elegant women's red autumn coat with belt, hanging on a hanger in a minimalist closet with soft natural light filtering through a window, showcasing premium fabric quality"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Red Coat</h3>
+                <p class="text-gray-600">$79.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="home">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f3c37e4-68f0-48e9-8496-4c8810281dbb.png" alt="Modern stainless steel coffee machine with digital display and sleek silver finish, placed on a marble kitchen countertop with steam rising from a filled cup beside it"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Coffee Machine</h3>
+                <p class="text-gray-600">$129.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3e050fbe-fb17-47e7-bb41-a15dba237235.png" alt="Latest smartphone model in space gray color with OLED screen showcasing vibrant colors, held by a hand against a blurred cityscape background, emphasizing sleek design and premium build"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Smartphone</h3>
+                <p class="text-gray-600">$299.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="sports">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4543b72e-60b3-4fb6-8cd1-edfc38888207.png" alt="Professional-grade tennis racket in white and blue colors with a worn leather grip, resting on green grass with tennis balls scattered around, suggesting active outdoor use"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Tennis Racket</h3>
+                <p class="text-gray-600">$89.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="books">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7f448635-2a89-4dee-a04b-c89472104f0a.png" alt="Colorful illustrated children's book about adventure in the jungle, open on a page showing animated animals, lying on a striped rug in a bright sunny room"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Adventure Book</h3>
+                <p class="text-gray-600">$12.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="fashion">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/34be25f1-c811-45f9-8d98-bcdd37e27968.png" alt="Comfortable running sneakers in bright neon colors with mesh upper for breathability, placed on a treadmill platform with motion blur effect indicating speed and energy"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Running Shoes</h3>
+                <p class="text-gray-600">$69.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+
+            <!-- Additional Products -->
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/180bf4af-6e02-4344-ace5-8bb2133a6402.png" alt="Sleek wireless mouse in ergonomic design with RGB lighting and precision sensor, placed on a clean white desk with a computer monitor in the background"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Wireless Mouse</h3>
+                <p class="text-gray-600">$19.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="books">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3640da23-1593-4c68-a3c5-44044349b070.png" alt="Paperback novel about a thrilling mystery, with a dark cover featuring a magnifying glass and clues, resting on a cozy reading chair with a lamp beside it"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Mystery Novel</h3>
+                <p class="text-gray-600">$14.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="fashion">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0bc1881a-6293-42db-b887-3f8479c84e00.png" alt="Stylish leather boots in brown with zipper details, displayed on a wooden floor in a contemporary living room with neutral tones"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Leather Boots</h3>
+                <p class="text-gray-600">$99.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="home">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef92d6ca-2d1d-4c47-9838-6b81ef478294.png" alt="Elegant crystal vase with intricate patterns, filled with fresh flowers on a marble dining table, surrounded by soft candlelight"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Crystal Vase</h3>
+                <p class="text-gray-600">$39.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/12aa167e-ca00-45b5-a3fe-65bfdd6a1280.png" alt="Portable Bluetooth speaker in vibrant red with waterproof coating, sitting on sand at a beach with ocean waves in motion"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Bluetooth Speaker</h3>
+                <p class="text-gray-600">$59.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="sports">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/594a26b7-9227-4dd4-b98b-7d671884871b.png" alt="Yoga mat rolled up with a water bottle and towel nearby, on a polished hardwood floor in a serene wellness studio"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Yoga Mat</h3>
+                <p class="text-gray-600">$29.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="books">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fd47bace-1c3d-4cde-bb0f-803182c05bf0.png" alt="Cookbook with colorful food illustrations on the cover, open to a recipe page with ingredients list, on a kitchen counter"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Cookbook</h3>
+                <p class="text-gray-600">$22.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+            <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="fashion">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d6f64c41-1c0c-4f43-a10b-e966591b321d.png" alt="Casual jeans in blue denim with a relaxed fit, hanging on a clothesline with a city skyline view in the distance"
+                    class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">Blue Jeans</h3>
+                <p class="text-gray-600">$49.99</p>
+                <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
+            </div>
+        </section>
+
+        <!-- Account Modal (Mobile Registration/Login) -->
+        <div id="account-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4">
+                <h3 id="account-title" class="text-xl font-bold mb-4">Enter Mobile Number</h3>
+                <form id="mobile-form">
+                    <p class="text-sm text-gray-600 mb-2">Enter your 10-digit mobile number to verify or login.</p>
+                    <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                    <input type="tel" id="mobile" name="mobile" required pattern="\d{10}" placeholder="1234567890" class="mt-1 p-2 w-full border rounded-md">
+                    <button type="submit" id="mobile-submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600">Send OTP</button>
+                </form>
+                <button id="close-account" class="bg-gray-500 text-white p-2 rounded mt-4 w-full hover:bg-gray-600">Close</button>
+            </div>
+        </div>
+
+        <!-- OTP Modal -->
+        <div id="otp-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4">
+                <h3 class="text-xl font-bold mb-4">Verify OTP</h3>
+                <p class="text-sm text-gray-600 mb-2">Enter the 4-digit OTP sent to your mobile.</p>
+                <form id="otp-form">
+                    <label for="otp" class="block text-sm font-medium text-gray-700">OTP</label>
+                    <input type="text" id="otp" name="otp" required pattern="\d{4}" maxlength="4" placeholder="1234" class="mt-1 p-2 w-full border rounded-md">
+                    <button type="submit" class="w-full bg-green-500 text-white p-2 rounded mt-4 hover:bg-green-600">Verify & Login</button>
+                </form>
+                <button id="close-otp" class="bg-gray-500 text-white p-2 rounded mt-4 w-full hover:bg-gray-600">Close</button>
+            </div>
+        </div>
+
+        <!-- Cart Modal -->
+        <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-white p-6 rounded-lg max-w-md mx-auto mt-20">
+                <h3 class="text-xl font-bold mb-4">Your Cart</h3>
+                <ul id="cart-items" class="space-y-2"></ul>
+                <p id="total-price" class="font-bold mt-4">Total: $0.00</p>
+                <button id="proceed-checkout" class="bg-green-500 text-white p-2 rounded mt-4 w-full hover:bg-green-600">Place Order</button>
+                <button id="close-modal" class="bg-gray-500 text-white p-2 rounded mt-2 w-full hover:bg-gray-600">Close</button>
+            </div>
+        </div>
+
+        <!-- Address Modal -->
+        <div id="address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center overflow-y-auto">
+            <div class="bg-white p-6 rounded-lg w-full max-w-lg mx-4">
+                <h3 class="text-xl font-bold mb-4">Shipping Address</h3>
+                <form id="address-form">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="name" name="name" required class="mt-1 p-2 w-full border rounded-md">
+                    <label for="address" class="block text-sm font-medium text-gray-700 mt-4">Address</label>
+                    <textarea id="address" name="address" rows="3" required class="mt-1 p-2 w-full border rounded-md" placeholder="Street, City, State, PIN"></textarea>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mt-4">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required pattern="\d{10}" class="mt-1 p-2 w-full border rounded-md" placeholder="1234567890">
+                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600">Continue to Payment</button>
+                </form>
+                <button id="close-address" class="bg-gray-500 text-white p-2 rounded mt-4 w-full hover:bg-gray-600">Close</button>
+            </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center overflow-y-auto">
+            <div class="bg-white p-6 rounded-lg w-full max-w-lg mx-4">
+                <h3 class="text-xl font-bold mb-4">Payment Method</h3>
+                <p class="text-sm text-gray-600 mb-4">Select a payment option:</p>
+                <div class="space-y-4">
+                    <div id="cod-option" class="payment-option p-4 border rounded-md flex items-center">
+                        <input type="radio" name="payment" value="cod" class="mr-4">
+                        <div>
+                            <h4 class="font-semibold">Cash on Delivery</h4>
+                            <p class="text-sm text-gray-600">Pay when you receive your order.</p>
+                        </div>
+                    </div>
+                    <div id="upi-option" class="payment-option p-4 border rounded-md flex items-center">
+                        <input type="radio" name="payment" value="upi" class="mr-4">
+                        <div>
+                            <h4 class="font-semibold">UPI</h4>
+                            <p class="text-sm text-gray-600">Pay using UPI ID or QR.</p>
+                        </div>
+                    </div>
+                    <div id="card-option" class="payment-option p-4 border rounded-md flex items-center">
+                        <input type="radio" name="payment" value="card" class="mr-4">
+                        <div>
+                            <h4 class="font-semibold">Credit/Debit Card</h4>
+                            <p class="text-sm text-gray-600">Pay with your card.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="upi-form" class="mt-4 hidden">
+                    <label for="upi-id" class="block text-sm font-medium text-gray-700">UPI ID</label>
+                    <input type="text" id="upi-id" name="upi-id" placeholder="e.g., user@paytm" class="mt-1 p-2 w-full border rounded-md">
+                </div>
+                <div id="card-form" class="mt-4 hidden">
+                    <label for="card-number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required pattern="\d{16}" class="mt-1 p-2 w-full border rounded-md">
+                    <label for="expiry" class="block text-sm font-medium text-gray-700 mt-4">Expiry Date</label>
+                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required pattern="\d{2}/\d{2}" class="mt-1 p-2 w-full border rounded-md">
+                    <label for="cvv" class="block text-sm font-medium text-gray-700 mt-4">CVV</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="123" required pattern="\d{3}" class="mt-1 p-2 w-full border rounded-md">
+                </div>
+                <button id="place-order-btn" class="w-full bg-green-500 text-white p-2 rounded mt-4 hover:bg-green-600" disabled>Place Order</button>
+                <button id="close-payment" class="bg-gray-500 text-white p-2 rounded mt-2 w-full hover:bg-gray-600">Close</button>
+            </div>
+        </div>
+
+        <!-- Order Success Modal -->
+        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4 text-center">
+                <span id="celebration-emoji" class="text-6xl block mb-4">🎉</span>
+                <h3 class="text-2xl font-bold mb-4 text-green-600">Congratulations!</h3>
+                <p class="text-lg">Your order is done.</p>
+                <button id="close-success" class="bg-blue-500 text-white p-2 rounded mt-4 w-full hover:bg-blue-600">Close</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2023 Amajon. All rights reserved. | <a href="#" class="text-blue-300">Privacy Policy</a> | <a href="#" class="text-blue-300">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Use localStorage to store registered mobiles
+        let users = JSON.parse(localStorage.getItem('amajonUsers')) || [];
+        let loggedIn = false;
+        let currentOTP = null;
+        let currentMobile = null;
+        let cart = [];
+        let selectedPayment = null;
+
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-open');
+            sidebar.classList.toggle('sidebar-closed');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-open');
+            sidebar.classList.add('sidebar-closed');
+        });
+
+        // Account functionality
+        const accountBtn = document.getElementById('account-btn');
+        const accountModal = document.getElementById('account-modal');
+        const closeAccount = document.getElementById('close-account');
+        const mobileForm = document.getElementById('mobile-form');
+        const otpModal = document.getElementById('otp-modal');
+        const otpForm = document.getElementById('otp-form');
+        const closeOtp = document.getElementById('close-otp');
+
+        accountBtn.addEventListener('click', () => {
+            if (loggedIn) {
+                alert('You are already logged in as ' + currentMobile + '.');
+                return;
+            }
+            accountModal.classList.remove('hidden');
+        });
+
+        closeAccount.addEventListener('click', () => {
+            accountModal.classList.add('hidden');
+        });
+
+        mobileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentMobile = e.target.mobile.value;
+            if (users.includes(currentMobile)) {
+                loggedIn = true;
+                accountModal.classList.add('hidden');
+                accountBtn.textContent = 'Logout';
+                accountBtn.classList.remove('bg-green-500');
+                accountBtn.classList.add('bg-red-500');
+                alert('Auto-logged in with mobile: ' + currentMobile);
+                e.target.reset();
+            } else {
+                currentOTP = Math.floor(1000 + Math.random() * 9000).toString();
+                alert('OTP sent to ' + currentMobile + ': ' + currentOTP);
+                accountModal.classList.add('hidden');
+                otpModal.classList.remove('hidden');
+                e.target.reset();
+            }
+        });
+
+        closeOtp.addEventListener('click', () => {
+            otpModal.classList.add('hidden');
+        });
+
+        otpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const enteredOTP = e.target.otp.value;
+            if (enteredOTP === currentOTP) {
+                users.push(currentMobile);
+                localStorage.setItem('amajonUsers', JSON.stringify(users));
+                loggedIn = true;
+                otpModal.classList.add('hidden');
+                accountBtn.textContent = 'Logout';
+                accountBtn.classList.remove('bg-green-500');
+                accountBtn.classList.add('bg-red-500');
+                alert('Account created and logged in with mobile: ' + currentMobile);
+                e.target.reset();
+            } else {
+                alert('Invalid OTP. Try again.');
+            }
+        });
+
+        accountBtn.addEventListener('click', (e) => {
+            if (loggedIn) {
+                loggedIn = false;
+                currentMobile = null;
+                accountBtn.textContent = 'Account';
+                accountBtn.classList.add('bg-green-500');
+                accountBtn.classList.remove('bg-red-500');
+                alert('Logged out successfully.');
+            }
+        });
+
+        // Cart functionality
+        const cartCount = document.getElementById('cart-count');
+        const cartModal = document.getElementById('cart-modal');
+        const cartItems = document.getElementById('cart-items');
+        const totalPriceEl = document.getElementById('total-price');
+        const proceedCheckout = document.getElementById('proceed-checkout');
+        const closeModal = document.getElementById('close-modal');
+        const addToCartBtns = document.querySelectorAll('.add-to-cart');
+
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const productCard = e.target.closest('.product-card');
+                const title = productCard.querySelector('h3').textContent;
+                const priceStr = productCard.querySelector('p').textContent;
+                const price = parseFloat(priceStr.replace('$', ''));
+                const existing = cart.find(item => item.title === title);
+                if (existing) {
+                    existing.quantity++;
+                } else {
+                    cart.push({
+                        title,
+                        price,
+                        quantity: 1
+                    });
+                }
+                updateCart();
+            });
+        });
+
+        function updateCart() {
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+            totalPriceEl.textContent = `Total: $${total}`;
+        }
+
+        document.querySelector('.cart-icon').addEventListener('click', () => {
+            if (!loggedIn) {
+                alert('Please login first to view your cart.');
+                accountModal.classList.remove('hidden');
+                return;
+            }
+            cartModal.classList.remove('hidden');
+            cartItems.innerHTML = cart.map(item => `<li>${item.title} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}</li>`).join('');
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li>Your cart is empty.</li>';
+            }
+        });
+
+        closeModal.addEventListener('click', () => {
+            cartModal.classList.add('hidden');
+        });
+
+        proceedCheckout.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Your cart is empty.');
+                return;
+            }
+            cartModal.classList.add('hidden');
+            addressModal.classList.remove('hidden');
+        });
+
+        // Address functionality
+        const addressModal = document.getElementById('address-modal');
+        const closeAddress = document.getElementById('close-address');
+        const addressForm = document.getElementById('address-form');
+        const paymentModal = document.getElementById('payment-modal');
+
+        closeAddress.addEventListener('click', () => {
+            addressModal.classList.add('hidden');
+        });
+
+        addressForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Address saved successfully!');
+            addressModal.classList.add('hidden');
+            paymentModal.classList.remove('hidden');
+            e.target.reset();
+        });
+
+        // Payment functionality
+        const closePayment = document.getElementById('close-payment');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const codOption = document.getElementById('cod-option');
+        const upiOption = document.getElementById('upi-option');
+        const cardOption = document.getElementById('card-option');
+        const upiForm = document.getElementById('upi-form');
+        const cardForm = document.getElementById('card-form');
+        const successModal = document.getElementById('success-modal');
+        const celebrationEmoji = document.getElementById('celebration-emoji');
+        const closeSuccess = document.getElementById('close-success');
+
+        closePayment.addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
+        });
+
+        codOption.addEventListener('click', () => {
+            selectedPayment = 'cod';
+            upiForm.classList.add('hidden');
+            cardForm.classList.add('hidden');
+            placeOrderBtn.disabled = false;
+            codOption.querySelector('input[type="radio"]').checked = true;
+            upiOption.querySelector('input[type="radio"]').checked = false;
+            cardOption.querySelector('input[type="radio"]').checked = false;
+        });
+
+        upiOption.addEventListener('click', () => {
+            selectedPayment = 'upi';
+            upiForm.classList.remove('hidden');
+            cardForm.classList.add('hidden');
+            placeOrderBtn.disabled = false;
+            codOption.querySelector('input[type="radio"]').checked = false;
+            upiOption.querySelector('input[type="radio"]').checked = true;
+            cardOption.querySelector('input[type="radio"]').checked = false;
+        });
+
+        cardOption.addEventListener('click', () => {
+            selectedPayment = 'card';
+            cardForm.classList.remove('hidden');
+            upiForm.classList.add('hidden');
+            placeOrderBtn.disabled = false;
+            codOption.querySelector('input[type="radio"]').checked = false;
+            upiOption.querySelector('input[type="radio"]').checked = false;
+            cardOption.querySelector('input[type="radio"]').checked = true;
+        });
+
+        placeOrderBtn.addEventListener('click', () => {
+            // Validate form if card or UPI
+            if (selectedPayment === 'card') {
+                const cardNumber = cardForm.querySelector('#card-number').value;
+                const expiry = cardForm.querySelector('#expiry').value;
+                const cvv = cardForm.querySelector('#cvv').value;
+                if (cardNumber.length !== 16 || expiry.length !== 5 || cvv.length !== 3) {
+                    alert('Please fill in valid card details.');
+                    return;
+                }
+            }
+            if (selectedPayment === 'upi') {
+                const upiId = upiForm.querySelector('#upi-id').value;
+                if (!upiId) {
+                    alert('Please enter UPI ID.');
+                    return;
+                }
+            }
+            // Show success with blinking emoji
+            celebrationEmoji.classList.add('blink');
+            successModal.classList.remove('hidden');
+            paymentModal.classList.add('hidden');
+            cart = [];
+            updateCart();
+            // Remove blink after some time
+            setTimeout(() => {
+                celebrationEmoji.classList.remove('blink');
+            }, 5000);
+        });
+
+        closeSuccess.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+
+        // Category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const products = document.querySelectorAll('.product-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.dataset.category;
+                products.forEach(product => {
+                    if (category === 'all' || product.dataset.category === category) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+                categoryBtns.forEach(b => b.classList.remove('active', 'bg-blue-500', 'text-white'));
+                e.target.classList.add('active', 'bg-blue-500', 'text-white');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.toLowerCase();
+            products.forEach(product => {
+                const title = product.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        });
+    </script>
+</body>
+
+</html>
+</content>
+</create_file>
+
+<attempt_completion>
+    I've updated your Amajon website to fix the issues. Here's what I changed: ## Fixed "Place Order" Button - Changed the event listener from `addEventListener('submit', ...)` to `addEventListener('click', ...)` because the button is not inside a form to
+    submit. - Now when you click "Place Order", it will properly respond. ## Added Blinking Emoji and Congratulations Message - In the success modal, I added a large 🎉 emoji that blinks when shown to indicate celebration. - The modal now displays "Congratulations!
+    Your order is done." with the blinking emoji. - The blink effect lasts for 5 seconds after opening. ## General Improvements - Added basic validation for card and UPI fields before processing the order. - The emoji uses CSS animation with `.blink`
+    class for the blinking effect. - Everything else remains the same, and the website is fully responsive. ## How to Test 1. Login or create an account with a mobile number. 2. Add items to cart and proceed to place order. 3. Fill in the address and
+    select a payment option. 4. Click "Place Order" – you should see the blinking 🎉 emoji with the congratulations message. If the button still doesn't work or you need more changes, let me know!
+</attempt_completion>
