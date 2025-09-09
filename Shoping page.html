@@ -87,7 +87,7 @@
 </head>
 
 <body>
-    <!-- Header -->
+    
     <header class="bg-white shadow-md p-4 flex items-center justify-between sticky top-0 z-50 bg-red">
         <div class="flex items-center">
             <button id="sidebar-toggle" class="text-2xl mr-4 md:hidden">☰</button>
@@ -108,7 +108,7 @@
         </div>
     </header>
 
-    <!-- Sidebar -->
+    
     <aside id="sidebar" class="sidebar fixed top-0 left-0 w-64 h-full bg-gray-800 text-white p-4 transform -translate-x-full z-40 overflow-y-auto md:hidden">
         <button id="sidebar-close" class="text-2xl mb-4">&times;</button>
         <nav>
@@ -123,9 +123,9 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
+   
     <main class="container mx-auto p-4">
-        <!-- Hero Section -->
+      
         <section class="hero-image rounded-lg mb-8 flex items-center justify-center text-white text-center">
             <div>
                 <h2 class="text-4xl md:text-6xl font-bold mb-4">Welcome to Amajon</h2>
@@ -133,7 +133,7 @@
             </div>
         </section>
 
-        <!-- Categories -->
+       
         <nav class="hidden md:block mb-8">
             <div class="flex justify-center space-x-4">
                 <button class="category-btn p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 active:bg-blue-500 active:text-white" data-category="all">All</button>
@@ -145,9 +145,9 @@
             </div>
         </nav>
 
-        <!-- Products -->
+       
         <section id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Original 8 products remain the same -->
+           
             <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
                 <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/789c5fc2-08bf-4083-b939-0b136332f7fb.png" alt="High-resolution wireless Bluetooth headphones with sleek black design, ergonomic ear cushions, and a stylish urban aesthetic positioned on a desk next to a laptop"
                     class="w-full h-48 object-cover rounded">
@@ -205,7 +205,7 @@
                 <button class="add-to-cart bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600 w-full">Add to Cart</button>
             </div>
 
-            <!-- Additional Products -->
+           
             <div class="product-card bg-white p-4 rounded-lg shadow-md" data-category="electronics">
                 <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/180bf4af-6e02-4344-ace5-8bb2133a6402.png" alt="Sleek wireless mouse in ergonomic design with RGB lighting and precision sensor, placed on a clean white desk with a computer monitor in the background"
                     class="w-full h-48 object-cover rounded">
@@ -264,7 +264,7 @@
             </div>
         </section>
 
-        <!-- Account Modal (Mobile Registration/Login) -->
+       
         <div id="account-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4">
                 <h3 id="account-title" class="text-xl font-bold mb-4">Enter Mobile Number</h3>
@@ -278,7 +278,7 @@
             </div>
         </div>
 
-        <!-- OTP Modal -->
+       
         <div id="otp-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4">
                 <h3 class="text-xl font-bold mb-4">Verify OTP</h3>
@@ -292,7 +292,7 @@
             </div>
         </div>
 
-        <!-- Cart Modal -->
+    
         <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
             <div class="bg-white p-6 rounded-lg max-w-md mx-auto mt-20">
                 <h3 class="text-xl font-bold mb-4">Your Cart</h3>
@@ -303,7 +303,7 @@
             </div>
         </div>
 
-        <!-- Address Modal -->
+
         <div id="address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center overflow-y-auto">
             <div class="bg-white p-6 rounded-lg w-full max-w-lg mx-4">
                 <h3 class="text-xl font-bold mb-4">Shipping Address</h3>
@@ -320,7 +320,6 @@
             </div>
         </div>
 
-        <!-- Payment Modal -->
         <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center overflow-y-auto">
             <div class="bg-white p-6 rounded-lg w-full max-w-lg mx-4">
                 <h3 class="text-xl font-bold mb-4">Payment Method</h3>
@@ -365,7 +364,6 @@
             </div>
         </div>
 
-        <!-- Order Success Modal -->
         <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg w-full max-w-md mx-4 text-center">
                 <span id="celebration-emoji" class="text-6xl block mb-4">🎉</span>
@@ -376,7 +374,7 @@
         </div>
     </main>
 
-    <!-- Footer -->
+ 
     <footer class="bg-gray-800 text-white p-4 mt-8">
         <div class="container mx-auto text-center">
             <p>&copy; 2023 Amajon. All rights reserved. | <a href="#" class="text-blue-300">Privacy Policy</a> | <a href="#" class="text-blue-300">Terms of Service</a></p>
@@ -384,7 +382,7 @@
     </footer>
 
     <script>
-        // Use localStorage to store registered mobiles
+        
         let users = JSON.parse(localStorage.getItem('amajonUsers')) || [];
         let loggedIn = false;
         let currentOTP = null;
@@ -392,7 +390,7 @@
         let cart = [];
         let selectedPayment = null;
 
-        // Sidebar toggle
+    
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebarClose = document.getElementById('sidebar-close');
@@ -407,7 +405,7 @@
             sidebar.classList.add('sidebar-closed');
         });
 
-        // Account functionality
+   
         const accountBtn = document.getElementById('account-btn');
         const accountModal = document.getElementById('account-modal');
         const closeAccount = document.getElementById('close-account');
@@ -481,7 +479,7 @@
             }
         });
 
-        // Cart functionality
+     
         const cartCount = document.getElementById('cart-count');
         const cartModal = document.getElementById('cart-modal');
         const cartItems = document.getElementById('cart-items');
@@ -542,7 +540,7 @@
             addressModal.classList.remove('hidden');
         });
 
-        // Address functionality
+
         const addressModal = document.getElementById('address-modal');
         const closeAddress = document.getElementById('close-address');
         const addressForm = document.getElementById('address-form');
@@ -560,7 +558,7 @@
             e.target.reset();
         });
 
-        // Payment functionality
+     
         const closePayment = document.getElementById('close-payment');
         const placeOrderBtn = document.getElementById('place-order-btn');
         const codOption = document.getElementById('cod-option');
@@ -607,7 +605,7 @@
         });
 
         placeOrderBtn.addEventListener('click', () => {
-            // Validate form if card or UPI
+            
             if (selectedPayment === 'card') {
                 const cardNumber = cardForm.querySelector('#card-number').value;
                 const expiry = cardForm.querySelector('#expiry').value;
@@ -624,13 +622,13 @@
                     return;
                 }
             }
-            // Show success with blinking emoji
+            
             celebrationEmoji.classList.add('blink');
             successModal.classList.remove('hidden');
             paymentModal.classList.add('hidden');
             cart = [];
             updateCart();
-            // Remove blink after some time
+           
             setTimeout(() => {
                 celebrationEmoji.classList.remove('blink');
             }, 5000);
@@ -640,7 +638,7 @@
             successModal.classList.add('hidden');
         });
 
-        // Category filtering
+        
         const categoryBtns = document.querySelectorAll('.category-btn');
         const products = document.querySelectorAll('.product-card');
 
@@ -659,7 +657,7 @@
             });
         });
 
-        // Search functionality
+
         const searchInput = document.getElementById('search-input');
         const searchBtn = document.getElementById('search-btn');
 
@@ -686,11 +684,3 @@
 </html>
 </content>
 </create_file>
-
-<attempt_completion>
-    I've updated your Amajon website to fix the issues. Here's what I changed: ## Fixed "Place Order" Button - Changed the event listener from `addEventListener('submit', ...)` to `addEventListener('click', ...)` because the button is not inside a form to
-    submit. - Now when you click "Place Order", it will properly respond. ## Added Blinking Emoji and Congratulations Message - In the success modal, I added a large 🎉 emoji that blinks when shown to indicate celebration. - The modal now displays "Congratulations!
-    Your order is done." with the blinking emoji. - The blink effect lasts for 5 seconds after opening. ## General Improvements - Added basic validation for card and UPI fields before processing the order. - The emoji uses CSS animation with `.blink`
-    class for the blinking effect. - Everything else remains the same, and the website is fully responsive. ## How to Test 1. Login or create an account with a mobile number. 2. Add items to cart and proceed to place order. 3. Fill in the address and
-    select a payment option. 4. Click "Place Order" – you should see the blinking 🎉 emoji with the congratulations message. If the button still doesn't work or you need more changes, let me know!
-</attempt_completion>
